@@ -1,5 +1,6 @@
 import { Vue } from 'vue/types/vue'
 import { VNode, VNodeDirective, FunctionalComponentOptions, VNodeChildrenArrayContents } from 'vue/types'
+import { TableHeader } from '../components/VDataTable/VDataTableHeader'
 
 export function createSimpleFunctional (
   c: string,
