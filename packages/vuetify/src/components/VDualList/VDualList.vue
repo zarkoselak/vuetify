@@ -51,7 +51,14 @@
     }),
     methods: {
       moveItem(to, from, item) {
-        const i = from.findIndex(m => m[this.dataKey] === item[this.dataKey]);
+        const i = from.findIndex((m) => {
+          if(typeof m === 'object'){
+            return m[this.dataKey] === item[this.dataKey];
+          }
+          else{
+            return m === item;
+          }
+        });
         to.push(from[i]);
         from.splice(i, 1);
         if (this.sort) {
