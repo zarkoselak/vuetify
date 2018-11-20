@@ -6,6 +6,7 @@
         <v-dual-list
           :leftListData="leftListData"
           :rightListData="rightListData"
+          :headers="headers"
           sort="asc"
           sortKey="id"
           dataKey="id"
@@ -24,6 +25,7 @@
       VDualList,
     },
     data: () => ({
+      headers: {left: 'Header 11', right: 'Header 22'},
       leftListData: [
         {id: 1, text: 'Pawn', meta: 'item1' },
         {id: 2, text: 'Knight', meta: 'item2' },

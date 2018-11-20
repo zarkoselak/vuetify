@@ -1,7 +1,7 @@
 <template>
   <v-layout>
     <v-flex>
-      <v-subheader>Header1</v-subheader>
+      <v-subheader v-if="headers">{{headers.left}}</v-subheader>
       <v-list class="cardContainer">
         <v-list-tile
           v-for="(item, i) in leftListData"
@@ -13,7 +13,7 @@
       </v-list>
     </v-flex>
     <v-flex>
-      <v-subheader>Header2</v-subheader>
+      <v-subheader v-if="headers">{{headers.right}}</v-subheader>
       <v-list class="cardContainer">
         <v-list-tile
           v-for="(item, i) in rightListData"
@@ -30,6 +30,11 @@
 <script>
   export default {
     props:{
+      headers: {
+        type: Object,
+        default: null,
+        validator: v =>  v.left!== undefined && v.right !== undefined,
+      },
       leftListData: Array,
       rightListData: Array,
       sort: {
@@ -37,9 +42,9 @@
         default: null,
         validator: v =>  ['asc', 'desc'].indexOf(v) !== -1
       },
-      sortKey: [String, Number],
-      dataKey: [String, Number],
-      textKey: [String, Number],
+      sortKey: String,
+      dataKey: String,
+      textKey: String,
     },
     data: () => ({
       //
