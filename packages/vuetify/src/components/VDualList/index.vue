@@ -31,6 +31,8 @@
         {id: 4, text: 'Bishop', meta: 'item4' },
         {id: 5, text: 'Queen', meta: 'item5' },
         {id: 6, text: 'King', meta: 'item6' },
+        'text1',
+        'text2',
       ],
       rightListData: [],
     })

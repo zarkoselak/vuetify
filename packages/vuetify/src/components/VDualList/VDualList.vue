@@ -8,7 +8,7 @@
           :key="i"
           @click="moveItem(rightListData, leftListData, item)"
         >
-          <v-list-tile-title v-text="item[textKey]"></v-list-tile-title>
+          <v-list-tile-title v-text="typeof item === 'object' ? item[textKey] : item"></v-list-tile-title>
         </v-list-tile>
       </v-list>
     </v-flex>
@@ -20,7 +20,7 @@
           :key="i"
           @click="moveItem(leftListData, rightListData, item)"
         >
-          <v-list-tile-title v-text="item[textKey]"></v-list-tile-title>
+          <v-list-tile-title v-text="typeof item === 'object' ? item[textKey] : item"></v-list-tile-title>
         </v-list-tile>
       </v-list>
     </v-flex>
@@ -29,14 +29,18 @@
 
 <script>
   export default {
-    props:[
-      'leftListData',
-      'rightListData',
-      'sort',
-      'sortKey',
-      'dataKey',
-      'textKey',
-    ],
+    props:{
+      leftListData: Array,
+      rightListData: Array,
+      sort: {
+        type: String,
+        default: null,
+        validator: v =>  ['asc', 'desc'].indexOf(v) !== -1
+      },
+      sortKey: [String, Number],
+      dataKey: [String, Number],
+      textKey: [String, Number],
+    },
     data: () => ({
       //
     }),
@@ -45,31 +49,32 @@
         const i = from.findIndex(m => m[this.dataKey] === item[this.dataKey]);
         to.push(from[i]);
         from.splice(i, 1);
-        this.sortArrays();
+        if (this.sort) {
+          this.sortArrays();
+        }
       },
       sortArrays() {
         const sortFunc = (a, b) => {
-          if (a[this.sortKey].toString().toUpperCase() < b[this.sortKey].toString().toUpperCase()) {
-            if (this.sort === 'asc'){
-              return -1;
-            }
-            if(this.sort === 'desc'){
-              return 1;
-            }
+          const useKeyA = (typeof a === 'object') ? true : false ;
+          const useKeyB = (typeof b === 'object') ? true : false ;
+          const valA = (useKeyA) ? a[this.sortKey].toString().toUpperCase() : a.toUpperCase() ;
+          const valB = (useKeyB) ? b[this.sortKey].toString().toUpperCase() : b.toUpperCase() ;
+          if (valA < valB) {
+            if (this.sort === 'asc'){ return -1; }
+            if (this.sort === 'desc'){ return 1; }
           }
-          if (a[this.sortKey].toString().toUpperCase() > b[this.sortKey].toString().toUpperCase()) {
-            if (this.sort === 'asc'){
-              return 1;
-            }
-            if(this.sort === 'desc'){
-              return -1;
-            }
+          if (valA > valB) {
+            if (this.sort === 'asc'){ return 1; }
+            if (this.sort === 'desc'){ return -1; }
           }
           return 0;
         };
         this.leftListData.sort((a, b) => (sortFunc(a, b)));
         this.rightListData.sort((a, b) => (sortFunc(a, b)));
       },
+    },
+    mounted() {
+      if(this.sort){ this.sortArrays(); }
     }
   }
 </script>
