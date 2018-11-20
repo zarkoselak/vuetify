@@ -8,7 +8,9 @@
           :key="i"
           @click="moveItem(rightListData, leftListData, item)"
         >
-          <v-list-tile-title v-text="typeof item === 'object' ? item[textKey] : item"></v-list-tile-title>
+          <v-list-tile-title 
+            v-text="typeof item === 'object' ? item[textKey] : item"
+          ></v-list-tile-title>
         </v-list-tile>
       </v-list>
     </v-flex>
@@ -20,7 +22,9 @@
           :key="i"
           @click="moveItem(leftListData, rightListData, item)"
         >
-          <v-list-tile-title v-text="typeof item === 'object' ? item[textKey] : item"></v-list-tile-title>
+          <v-list-tile-title 
+            v-text="typeof item === 'object' ? item[textKey] : item"
+          ></v-list-tile-title>
         </v-list-tile>
       </v-list>
     </v-flex>
@@ -35,16 +39,31 @@
         default: null,
         validator: v =>  v.left!== undefined && v.right !== undefined,
       },
-      leftListData: Array,
-      rightListData: Array,
+      leftListData: {
+        type: Array,
+        required: true,
+      },
+      rightListData: {
+        type: Array,
+        required: true,
+      },
       sort: {
         type: String,
         default: null,
         validator: v =>  ['asc', 'desc'].indexOf(v) !== -1
       },
-      sortKey: String,
-      dataKey: String,
-      textKey: String,
+      sortKey: {
+        type: String,
+        default: 'id',
+      },
+      dataKey: {
+        type: String,
+        default: 'id',
+      },
+      textKey: {
+        type: String,
+        default: 'text',
+      },
     },
     data: () => ({
       //
