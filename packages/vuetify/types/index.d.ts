@@ -7,6 +7,7 @@ import './colors'
 declare const Vuetify: Vuetify
 export default Vuetify
 export interface Vuetify {
+  new (Vue: VueConstructor, args?: VuetifyUseOptions): VuetifyObject
   install: PluginFunction<VuetifyUseOptions>
   version: string
 }
@@ -51,6 +52,18 @@ export interface VuetifyObject extends Vue {
   lang: VuetifyLanguage
   options: VuetifyOptions
   rtl: boolean
+}
+
+declare module 'vue/types/options' {
+  export interface ComponentOptions<
+  V extends Vue,
+  Data=DefaultData<V>,
+  Methods=DefaultMethods<V>,
+  Computed=DefaultComputed,
+  PropsDef=PropsDefinition<DefaultProps>,
+  Props=DefaultProps> {
+    vuetify?: VuetifyObject
+  }
 }
 
 declare module 'vue/types/vue' {

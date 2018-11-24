@@ -13,6 +13,7 @@ import {
   ThisTypedComponentOptionsWithRecordProps
 } from 'vue/types/options'
 import { TouchStoredHandlers } from './directives/touch'
+import { VuetifyObject } from 'vuetify'
 
 declare global {
   interface Window {
@@ -64,6 +65,26 @@ declare module 'vue/types/vnode' {
       callback: (v: any) => void
       expression: string
       value: any
+    }
+  }
+}
+
+declare module 'vue/types/options' {
+  export interface ComponentOptions<
+  V extends Vue,
+  Data=DefaultData<V>,
+  Methods=DefaultMethods<V>,
+  Computed=DefaultComputed,
+  PropsDef=PropsDefinition<DefaultProps>,
+  Props=DefaultProps> {
+    vuetify?: VuetifyObject | true
+  }
+}
+
+declare module 'vue/types/vue' {
+  interface VueConstructor {
+    util: {
+      defineReactive (instance: Vue, property: string, obj: object): () => void
     }
   }
 }
