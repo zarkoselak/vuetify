@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import Vuetify from '@/'
+import getAllPropertyNames from '@/test/util/getAllPropertyNames'
 
 describe('full import', () => {
   Vue.use(Vuetify)
-  const registeredComponents = Object.keys(Vue.options.components).sort()
-  const registeredDirectives = Object.keys(Vue.options.directives).sort()
+  const registeredComponents = getAllPropertyNames(Vue.options.components).sort()
+  const registeredDirectives = getAllPropertyNames(Vue.options.directives).sort()
 
   // TODO: update ts-jest
   registeredComponents.splice(registeredComponents.indexOf('default'), 1)

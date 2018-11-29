@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import getAllPropertyNames from '@/test/util/getAllPropertyNames'
 import * as allComponents from '@/components'
 import Vuetify, {
   VApp,
@@ -272,7 +273,7 @@ describe('a-la-carte import - from /lib', () => {
   Vue.use(Vuetify, {
     components
   })
-  const registeredComponents = Object.keys(Vue.options.components).sort()
+  const registeredComponents = getAllPropertyNames(Vue.options.components).sort()
 
   // remove vue builtins
   registeredComponents.splice(0, 3)
