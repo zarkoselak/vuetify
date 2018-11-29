@@ -2,9 +2,9 @@ import _Vue from 'vue'
 
 import application from './mixins/application'
 import breakpoint from './mixins/breakpoint'
-import theme from './mixins/theme'
-import icons from './mixins/icons'
-import options from './mixins/options'
+import IconsService from './services/IconsService'
+import OptionsService from './services/OptionsService'
+import ThemeService from './services/ThemeService'
 import genLang from './mixins/lang'
 import goTo from './util/goTo'
 
@@ -18,25 +18,30 @@ import { Vuetify as VuetifyPlugin, VuetifyUseOptions } from 'vuetify/types'
 const Vuetify = (function Vuetify (args: VuetifyUseOptions = {}) {
   const lang = genLang(args.lang)
 
-  return new _Vue({
+  const $vuetify = new _Vue({
     vuetify: true,
     mixins: [
-      breakpoint
+      breakpoint,
+      IconsService(args),
+      OptionsService(args),
+      ThemeService(args)
     ],
     data: {
       application,
       dark: false,
-      icons: icons(args.iconfont, args.icons),
       lang,
-      options: options(args.options),
-      rtl: args.rtl,
-      theme: theme(args.theme)
+      rtl: args.rtl
     },
     methods: {
       goTo,
       t: lang.t.bind(lang)
     }
   })
+
+  const services = $vuetify.$options.mounted as Function[] | undefined
+  services && services.forEach(service => service($vuetify))
+
+  return $vuetify
 }) as unknown as VuetifyPlugin
 
 Vuetify.version = __VUETIFY_VERSION__
@@ -83,8 +88,7 @@ Vuetify.install = function install (Vue: VueConstructor, args: VuetifyUseOptions
       } else if (options.parent && options.parent.$vuetify) {
         this.$vuetify = options.parent.$vuetify
       } else {
-        const vuetify = new Vuetify(args)
-        Vue.prototype.$vuetify = vuetify
+        Vue.prototype.$vuetify = new Vuetify(args)
       }
     }
   })

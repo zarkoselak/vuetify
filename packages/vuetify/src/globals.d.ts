@@ -84,6 +84,10 @@ declare module 'vue/types/vue' {
   >
 
   export interface Vue {
+    $meta?: Record<string, any>
+  }
+
+  export interface Vue {
     _uid: number
     _isDestroyed: boolean
 

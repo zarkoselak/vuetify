@@ -1,26 +1,7 @@
 import { colorToInt, intToHex, colorToHex, RGB } from './colorUtils'
 import * as sRGB from './color/transformSRGB'
 import * as LAB from './color/transformCIELAB'
-import { VuetifyTheme } from 'vuetify/types'
-
-interface ParsedThemeItem {
-  base: string
-  lighten5: string
-  lighten4: string
-  lighten3: string
-  lighten2: string
-  lighten1: string
-  darken1: string
-  darken2: string
-  darken3: string
-  darken4: string
-
-  [name: string]: string
-}
-
-interface ParsedTheme {
-  [name: string]: ParsedThemeItem
-}
+import { VuetifyTheme, ParsedTheme } from 'vuetify/types'
 
 export function parse (theme: VuetifyTheme | Record<string, number | string>, isItem = false): ParsedTheme {
   const colors = Object.keys(theme)

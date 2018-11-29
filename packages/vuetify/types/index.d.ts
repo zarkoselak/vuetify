@@ -161,9 +161,26 @@ export interface VuetifyTheme {
   success: VuetifyThemeItem
 }
 
+export interface ParsedThemeItem {
+  base: string
+  lighten5: string
+  lighten4: string
+  lighten3: string
+  lighten2: string
+  lighten1: string
+  darken1: string
+  darken2: string
+  darken3: string
+  darken4: string
+  [name: string]: string
+}
+export interface ParsedTheme {
+  [name: string]: ParsedThemeItem
+}
+
 export interface VuetifyThemeCache {
-  get: (parsedTheme: VuetifyTheme) => string | null
-  set: (parsedTheme: VuetifyTheme, css: string) => void
+  get: (parsedTheme: ParsedTheme) => string | null
+  set: (parsedTheme: ParsedTheme, css: string) => void
 }
 
 export interface VuetifyOptions {
