@@ -69,18 +69,6 @@ declare module 'vue/types/vnode' {
   }
 }
 
-declare module 'vue/types/options' {
-  export interface ComponentOptions<
-  V extends Vue,
-  Data=DefaultData<V>,
-  Methods=DefaultMethods<V>,
-  Computed=DefaultComputed,
-  PropsDef=PropsDefinition<DefaultProps>,
-  Props=DefaultProps> {
-    vuetify?: VuetifyObject | true
-  }
-}
-
 declare module 'vue/types/vue' {
   interface VueConstructor {
     util: {

@@ -5,8 +5,8 @@ import directives from './directives'
 import { VueConstructor } from 'vue'
 import { VuetifyUseOptions } from 'vuetify/types'
 
-export default function Vuetify (Vue: VueConstructor, args: VuetifyUseOptions = {}) {
-  return new VuetifyComponent(Vue, args)
+export default function Vuetify (args: VuetifyUseOptions = {}) {
+  return new VuetifyComponent(args)
 }
 
 Vuetify.install = function install (Vue: VueConstructor, args: VuetifyUseOptions = {}) {

@@ -7,9 +7,9 @@ import './colors'
 declare const Vuetify: Vuetify
 export default Vuetify
 export interface Vuetify {
-  new (Vue: VueConstructor, args?: VuetifyUseOptions): VuetifyObject
   install: PluginFunction<VuetifyUseOptions>
   version: string
+  new (args?: VuetifyUseOptions): VuetifyObject
 }
 
 export type ComponentOrPack = Component & { $_vuetify_subcomponents?: Record<string, ComponentOrPack> }
@@ -62,7 +62,7 @@ declare module 'vue/types/options' {
   Computed=DefaultComputed,
   PropsDef=PropsDefinition<DefaultProps>,
   Props=DefaultProps> {
-    vuetify?: VuetifyObject
+    vuetify?: VuetifyObject | true
   }
 }
 

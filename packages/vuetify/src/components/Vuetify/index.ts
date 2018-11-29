@@ -1,4 +1,4 @@
-import OurVue, { PluginFunction } from 'vue'
+import _Vue from 'vue'
 
 import application from './mixins/application'
 import breakpoint from './mixins/breakpoint'
@@ -15,16 +15,10 @@ import { consoleWarn, consoleError } from '../../util/console'
 import { VueConstructor } from 'vue/types'
 import { Vuetify as VuetifyPlugin, VuetifyUseOptions } from 'vuetify/types'
 
-interface VuetifySomething {
-  new (Vue: VueConstructor, args?: VuetifyUseOptions): InstanceType<typeof OurVue>
-  install: PluginFunction<VuetifyUseOptions>
-  version: string
-}
-
-const Vuetify = (function Vuetify (Vue: VueConstructor, args: VuetifyUseOptions = {}) {
+const Vuetify = (function Vuetify (args: VuetifyUseOptions = {}) {
   const lang = genLang(args.lang)
 
-  return new Vue({
+  return new _Vue({
     vuetify: true,
     mixins: [
       breakpoint
@@ -43,7 +37,7 @@ const Vuetify = (function Vuetify (Vue: VueConstructor, args: VuetifyUseOptions 
       t: lang.t.bind(lang)
     }
   })
-}) as unknown as VuetifySomething
+}) as unknown as VuetifyPlugin
 
 Vuetify.version = __VUETIFY_VERSION__
 
@@ -51,7 +45,7 @@ Vuetify.install = function install (Vue: VueConstructor, args: VuetifyUseOptions
   if ((this as any).installed) return
   ;(this as any).installed = true
 
-  if (OurVue !== Vue) {
+  if (_Vue !== Vue) {
     consoleError('Multiple instances of Vue detected\nSee https://github.com/vuetifyjs/vuetify/issues/4068\n\nIf you\'re seeing "$attrs is readonly", it\'s caused by this')
   }
 
@@ -81,15 +75,15 @@ Vuetify.install = function install (Vue: VueConstructor, args: VuetifyUseOptions
       const options = this.$options
 
       if (options.vuetify === true) {
-        // noop
+        // noop, prevents an infinite loop
+        // when we create our own vue instance
       } else if (options.vuetify) {
-        options.vuetify.rootInstance = this
-
-        Vue.util.defineReactive(this, '$vuetify', options.vuetify.framework)
+        (options.vuetify.$parent as any) = this
+        this.$vuetify = options.vuetify
       } else if (options.parent && options.parent.$vuetify) {
         this.$vuetify = options.parent.$vuetify
       } else {
-        const vuetify = new Vuetify(Vue, args)
+        const vuetify = new Vuetify(args)
         Vue.prototype.$vuetify = vuetify
       }
     }
