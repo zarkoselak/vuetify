@@ -3,6 +3,7 @@ import App from './App'
 import Boilerplate from './Boilerplate'
 import Vuetify from 'vuetify'
 import VueRouter from 'vue-router'
+import Meta from 'vue-meta'
 import router from './router'
 import '@mdi/font/css/materialdesignicons.css'
 
@@ -10,6 +11,7 @@ Vue.config.performance = true
 
 Vue.use(Vuetify)
 Vue.use(VueRouter)
+Vue.use(Meta)
 
 Vue.component(Boilerplate.name, Boilerplate)
 
