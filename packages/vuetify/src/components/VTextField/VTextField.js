@@ -24,12 +24,10 @@ import { deprecate } from '../../util/console'
 const dirtyTypes = ['color', 'file', 'time', 'date', 'datetime-local', 'week', 'month']
 
 /* @vue/component */
-export default {
+export default VInput.extend({
   name: 'v-text-field',
 
   directives: { Ripple },
-
-  extends: VInput,
 
   mixins: [Maskable, Loadable],
 
@@ -67,7 +65,6 @@ export default {
     solo: Boolean,
     soloInverted: Boolean,
     suffix: String,
-    textarea: Boolean, // TODO: Deprecate
     type: {
       type: String,
       default: 'text'
@@ -94,7 +91,8 @@ export default {
         'v-text-field--box': this.box,
         'v-text-field--enclosed': this.isEnclosed,
         'v-text-field--reverse': this.reverse,
-        'v-text-field--outline': this.hasOutline
+        'v-text-field--outline': this.hasOutline,
+        'v-text-field--placeholder': this.placeholder
       }
     },
     counterValue () {
@@ -144,7 +142,7 @@ export default {
       return this.solo || this.soloInverted
     },
     labelPosition () {
-      const offset = (this.prefix && !this.labelValue) ? 16 : 0
+      const offset = (this.prefix && !this.labelValue) ? this.prefixWidth : 0
 
       return (!this.$vuetify.rtl !== !this.reverse) ? {
         left: 'auto',
@@ -155,11 +153,19 @@ export default {
       }
     },
     showLabel () {
-      return this.hasLabel && (!this.isSingle || (!this.isLabelActive && !this.placeholder))
+      return this.hasLabel && (!this.isSingle || (!this.isLabelActive && !this.placeholder && !this.prefixLabel))
     },
     labelValue () {
       return !this.isSingle &&
-        Boolean(this.isFocused || this.isLabelActive || this.placeholder)
+        Boolean(this.isFocused || this.isLabelActive || this.placeholder || this.prefixLabel)
+    },
+    prefixWidth () {
+      if (!this.prefix && !this.$refs.prefix) return
+
+      return this.$refs.prefix.offsetWidth
+    },
+    prefixLabel () {
+      return (this.prefix && !this.value)
     }
   },
 
@@ -239,7 +245,7 @@ export default {
       return this.genSlot('append', 'inner', slot)
     },
     genInputSlot () {
-      const input = VInput.methods.genInputSlot.call(this)
+      const input = VInput.options.methods.genInputSlot.call(this)
 
       const prepend = this.genPrependInnerSlot()
       prepend && input.children.unshift(prepend)
@@ -344,7 +350,7 @@ export default {
       return this.$createElement('div', {
         staticClass: 'v-text-field__details'
       }, [
-        VInput.methods.genMessages.call(this),
+        VInput.options.methods.genMessages.call(this),
         this.genCounter()
       ])
     },
@@ -410,12 +416,12 @@ export default {
         e.stopPropagation()
       }
 
-      VInput.methods.onMouseDown.call(this, e)
+      VInput.options.methods.onMouseDown.call(this, e)
     },
     onMouseUp (e) {
       if (this.hasMouseDown) this.focus()
 
-      VInput.methods.onMouseUp.call(this, e)
+      VInput.options.methods.onMouseUp.call(this, e)
     }
   }
-}
+})

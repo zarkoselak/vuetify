@@ -1,11 +1,5 @@
 const sharedGridProps = [
   {
-    'name': 'id',
-    'type': 'String',
-    'default': 'undefined',
-    'source': null
-  },
-  {
     'name': 'tag',
     'type': 'String',
     'default': 'div',
@@ -106,25 +100,20 @@ const sharedGridProps = [
     'type': 'Boolean',
     'default': 'false',
     'source': null
-  },
-  {
-    'name': 'reverse',
-    'type': 'Boolean',
-    'default': 'false',
-    'source': null
-  },
-  {
-    'name': 'wrap',
-    'type': 'Boolean',
-    'default': 'false',
-    'source': null
   }
 ]
 
 const dataIterableProps = [
   {
     name: 'pagination',
-    sync: true
+    sync: true,
+    example: {
+      descending: 'boolean',
+      page: 'number',
+      rowsPerPage: 'number // -1 for All',
+      sortBy: 'string',
+      totalItems: 'number'
+    }
   },
   {
     name: 'filter',
@@ -250,12 +239,40 @@ const VSelect = {
   ].concat(validatableEvents)
 }
 
+const VTreeviewScopedProps = {
+  item: 'any',
+  leaf: 'boolean',
+  selected: 'boolean',
+  indeterminate: 'boolean',
+  active: 'boolean',
+  open: 'boolean'
+}
+
 module.exports = {
   '$vuetify': {
     functions: [
       {
         name: 'goTo',
         signature: '(target: string | number | HTMLElement | VueComponent, options?: object) => void'
+      }
+    ]
+  },
+  'internationalization': {
+    api: [
+      {
+        name: 'locales',
+        default: '{ en: VuetifyLocale }',
+        type: 'Record<string, VuetifyLocale>'
+      },
+      {
+        name: 'current',
+        default: 'en',
+        type: 'string'
+      },
+      {
+        name: 't',
+        default: '(key: string, ...params: Array<string | number>): string',
+        type: 'Function'
       }
     ]
   },
@@ -376,6 +393,15 @@ module.exports = {
   'v-card': {
     slots: ['default']
   },
+  'v-card-actions': {
+    slots: ['default']
+  },
+  'v-card-text': {
+    slots: ['default']
+  },
+  'v-card-title': {
+    slots: ['default']
+  },
   'v-carousel': {
     slots: ['default'],
     events: [
@@ -464,27 +490,27 @@ module.exports = {
     ],
     functions: [
       {
-        name: 'title-date-format',
+        name: 'titleDateFormat',
         signature: '(date: string, locale: string): string'
       },
       {
-        name: 'day-format',
+        name: 'dayFormat',
         signature: '(date: string, locale: string): string'
       },
       {
-        name: 'header-date-format',
+        name: 'headerDateFormat',
         signature: '(date: string, locale: string): string'
       },
       {
-        name: 'month-format',
+        name: 'monthFormat',
         signature: '(date: string, locale: string): string'
       },
       {
-        name: 'year-format',
+        name: 'yearFormat',
         signature: '(date: string, locale: string): string'
       },
       {
-        name: 'allowed-dates',
+        name: 'allowedDates',
         signature: '(date: string): boolean'
       }
     ]
@@ -495,12 +521,12 @@ module.exports = {
   'v-divider': {
     props: [
       {
-        "name": "dark",
-        "source": 'themeable'
+        'name': 'dark',
+        'source': 'themeable'
       },
       {
-        "name": "light",
-        "source": 'themeable'
+        'name': 'light',
+        'source': 'themeable'
       }
     ]
   },
@@ -540,7 +566,7 @@ module.exports = {
         'source': null
       },
       {
-        'name': 'order-(size)(0-12)',
+        'name': 'order-(size)(1-12)',
         'type': 'Boolean',
         'default': 'false',
         'source': null
@@ -550,8 +576,44 @@ module.exports = {
         'type': 'Boolean',
         'default': 'false',
         'source': null
+      },
+      {
+        'name': 'alignSelfStart',
+        'type': 'Boolean',
+        'default': 'false',
+        'source': null
+      },
+      {
+        'name': 'alignSelfEnd',
+        'type': 'Boolean',
+        'default': 'false',
+        'source': null
+      },
+      {
+        'name': 'alignSelfCenter',
+        'type': 'Boolean',
+        'default': 'false',
+        'source': null
+      },
+      {
+        'name': 'alignSelfBaseline',
+        'type': 'Boolean',
+        'default': 'false',
+        'source': null
+      },
+      {
+        'name': 'grow',
+        'type': 'Boolean',
+        'default': 'false',
+        'source': null
+      },
+      {
+        'name': 'shrink',
+        'type': 'Boolean',
+        'default': 'false',
+        'source': null
       }
-    ].concat(sharedGridProps)
+    ]
   },
   'v-footer': {
     slots: ['default']
@@ -561,6 +623,10 @@ module.exports = {
     functions: [
       {
         name: 'reset',
+        signature: '(): void'
+      },
+      {
+        name: 'resetValidation',
         signature: '(): void'
       },
       {
@@ -582,7 +648,7 @@ module.exports = {
         props: {
           hover: 'boolean'
         }
-      },
+      }
     ]
   },
   'v-icon': {
@@ -598,6 +664,18 @@ module.exports = {
       },
       {
         'name': 'column',
+        'type': 'Boolean',
+        'default': 'false',
+        'source': null
+      },
+      {
+        'name': 'reverse',
+        'type': 'Boolean',
+        'default': 'false',
+        'source': null
+      },
+      {
+        'name': 'wrap',
         'type': 'Boolean',
         'default': 'false',
         'source': null
@@ -649,7 +727,7 @@ module.exports = {
         value: 'void'
       },
       {
-        name: 'right',
+        name: 'previous',
         value: 'void'
       }
     ]
@@ -723,6 +801,20 @@ module.exports = {
         value: 'array'
       }
     ].concat(validatableEvents)
+  },
+  'v-sheet': {
+    slots: ['default'],
+    props: [
+      {
+        name: 'tag',
+        type: 'String',
+        default: 'div'
+      },
+      {
+        name: 'tile',
+        type: 'Boolean'
+      }
+    ]
   },
   'v-speed-dial': {
     slots: ['activator', 'default']
@@ -817,5 +909,36 @@ module.exports = {
   },
   'v-tooltip': {
     slots: ['activator', 'default']
+  },
+  'v-treeview': {
+    scopedSlots: [
+      {
+        name: 'prepend',
+        props: VTreeviewScopedProps
+      },
+      {
+        name: 'label',
+        props: VTreeviewScopedProps
+      },
+      {
+        name: 'append',
+        props: VTreeviewScopedProps
+      }
+    ]
+  },
+  'v-window': {
+    props: [
+      {
+        name: 'touch',
+        example: {
+          left: 'Function',
+          right: 'Function'
+        }
+      }
+    ],
+    slots: ['default']
+  },
+  'v-window-item': {
+    slots: ['default']
   }
 }

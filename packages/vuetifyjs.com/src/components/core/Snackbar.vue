@@ -19,17 +19,18 @@
       >
         {{ computedIcon }}
       </v-icon>
-      <helpers-markdown
-        :source="snackbar.msg"
+      <doc-markdown
+        :code="snackbar.msg"
         class="snack-markdown"
       />
       <v-spacer />
       <v-btn
-        :color="!computedIcon ? 'primary lighten-3' : null"
+        :color="computedColor"
         :ripple="false"
         v-bind="bind"
+        :flat="snackbar.color !== 'store'"
         dark
-        flat
+        depressed
         @click="onClick"
       >
         {{ snackbar.text }}
@@ -48,17 +49,14 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex'
+  import {
+    mapMutations,
+    mapState
+  } from 'vuex'
 
   export default {
-    data: () => ({
-      snack: false
-    }),
-
     computed: {
-      ...mapState('app', {
-        snackbar: state => state.appSnackbar
-      }),
+      ...mapState('snackbar', ['snackbar', 'value']),
       bind () {
         if (this.snackbar.to) return { to: this.snackbar.to }
         if (this.snackbar.href) {
@@ -71,13 +69,29 @@
 
         return {}
       },
+      computedColor () {
+        if (this.snackbar.color !== 'store') {
+          return !this.computedIcon ? 'primary lighten-3' : null
+        }
+
+        return 'green'
+      },
       computedIcon () {
         switch (this.snackbar.color) {
+          case 'store': return 'mdi-cart'
           case 'success': return 'check'
           case 'info': return 'info'
           case 'warning': return 'warning'
           case 'error': return 'error'
           default: return false
+        }
+      },
+      snack: {
+        get () {
+          return this.value
+        },
+        set (val) {
+          this.setValue(val)
         }
       }
     },
@@ -93,7 +107,18 @@
       }
     },
 
+    async created () {
+      const notify = await fetch('https://cdn.vuetifyjs.com/notify.json', {
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        }
+      }).then(res => res.json())
+
+      if (notify) this.setSnackbar(notify)
+    },
+
     methods: {
+      ...mapMutations('snackbar', ['setSnackbar', 'setValue']),
       markViewed () {
         if (this.snackbar.id) {
           localStorage.setItem(this.snackbar.id, true)

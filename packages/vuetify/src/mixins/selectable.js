@@ -6,10 +6,8 @@ import Rippleable from './rippleable'
 import Comparable from './comparable'
 
 /* @vue/component */
-export default {
+export default VInput.extend({
   name: 'selectable',
-
-  extends: VInput,
 
   mixins: [Rippleable, Comparable],
 
@@ -78,7 +76,7 @@ export default {
     genLabel () {
       if (!this.hasLabel) return null
 
-      const label = VInput.methods.genLabel.call(this)
+      const label = VInput.options.methods.genLabel.call(this)
 
       label.data.on = { click: this.onChange }
 
@@ -92,10 +90,10 @@ export default {
           disabled: this.isDisabled,
           id: this.id,
           role: type,
-          type,
-          value: this.inputValue
+          type
         }, attrs),
         domProps: {
+          value: this.value,
           checked: this.isActive
         },
         on: {
@@ -145,4 +143,4 @@ export default {
     /** @abstract */
     onKeydown (e) {}
   }
-}
+})

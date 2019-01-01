@@ -70,7 +70,7 @@ export default mixins<options &
     }
   },
 
-  mounted () {
+  beforeMount () {
     this.expansionPanel.register(this)
 
     // Can be removed once fully deprecated
@@ -99,11 +99,11 @@ export default mixins<options &
         directives: [{
           name: 'show',
           value: this.isActive
-        }] as any
+        }]
       }, this.showLazyContent(this.$slots.default))
     },
     genHeader () {
-      const children = [...this.$slots.header]
+      const children = [...(this.$slots.header || [])]
 
       if (!this.hideActions) children.push(this.genIcon())
 
@@ -112,7 +112,7 @@ export default mixins<options &
         directives: [{
           name: 'ripple',
           value: this.ripple
-        }] as any,
+        }],
         on: {
           click: this.onHeaderClick
         }
@@ -130,34 +130,31 @@ export default mixins<options &
           directives: [{
             name: 'show',
             value: !this.isDisabled
-          }] as any
+          }]
         }, icon)
       ])
     },
     toggle (active: boolean) {
       if (active) this.isBooted = true
 
-      // We treat bootable differently
-      // Needs time to calc height
-      this.$nextTick(() => (this.isActive = active))
+      this.isActive = active
     }
   },
 
   render (h): VNode {
-    const children = []
-
-    this.$slots.header && children.push(this.genHeader())
-    children.push(h(VExpandTransition, [this.genBody()]))
-
     return h('li', {
       staticClass: 'v-expansion-panel__container',
       class: this.containerClasses,
       attrs: {
-        tabindex: this.isReadonly || this.isDisabled ? null : 0
+        tabindex: this.isReadonly || this.isDisabled ? null : 0,
+        'aria-expanded': Boolean(this.isActive)
       },
       on: {
         keydown: this.onKeydown
       }
-    }, children)
+    }, [
+      this.$slots.header && this.genHeader(),
+      h(VExpandTransition, [this.genBody()])
+    ])
   }
 })
