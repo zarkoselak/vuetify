@@ -4,7 +4,7 @@
 "preserve_hierarchy": true
 "files": [
   {
-    "source": "en-US\\**\\*.json",
-    "translation": "%locale%\\**\\%original_file_name%",
+    "source": "packages\\vuetifyjs.com\\lang\\en-US\\**\\*.json",
+    "translation": "packages\\vuetifyjs.com\\lang\\%locale%\\**\\%original_file_name%",
   }
 ]
