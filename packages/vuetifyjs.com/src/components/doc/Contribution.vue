@@ -11,17 +11,20 @@
 <script>
   // Utilities
   import {
+    mapGetters,
     mapState
   } from 'vuex'
   import { parseLink } from '@/util/helpers'
 
   export default {
-    inject: ['lang', 'page'],
-
     computed: {
+      ...mapGetters('documentation', [
+        'namespace',
+        'page'
+      ]),
       ...mapState('route', ['params']),
       contributionGuide () {
-        return this.parseLink('', 'Contribution Guide', '/getting-started/contributing')
+        return this.parseLink('', 'Contribution Guide', `/${this.params.lang}/getting-started/contributing`)
       },
       contributionLanguageGithub () {
         return this.parseLink('', 'language', this.contributionLanguageLink)

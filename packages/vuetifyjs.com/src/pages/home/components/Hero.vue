@@ -32,18 +32,25 @@
             wrap
           >
             <v-btn
+              :to="{
+                name: 'Documentation',
+                params: {
+                  lang: $route.params.lang,
+                  namespace: 'getting-started',
+                  page: 'quick-start'
+                }
+              }"
               class="primary--text ml-0"
               color="white"
               large
-              to="getting-started/quick-start"
             >
               {{ $t('Vuetify.Home.getStarted') }}
             </v-btn>
             <v-btn
               color="white"
-              outline
+              href="https://github.com/vuetifyjs/vuetify"
               large
-              to="getting-started/why-vuetify"
+              outline
             >
               <v-icon left>mdi-github-circle</v-icon>
               Github
@@ -51,8 +58,8 @@
             <v-btn
               color="grey lighten-3 mr-0"
               outline
+              href="https://community.vuetifyjs.com"
               large
-              href="https://github.com/vuetifyjs/vuetify"
               rel="noopener"
               target="_blank"
             >

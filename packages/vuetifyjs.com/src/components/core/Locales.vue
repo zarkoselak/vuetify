@@ -11,12 +11,14 @@
       flat
       style="min-width: 48px"
     >
-      <v-icon v-if="currentLanguage.locale === 'eo-UY'">language</v-icon>
-      <v-img
-        v-else
-        :src="`https://cdn.vuetifyjs.com/images/flags/${currentLanguage.country}.png`"
-        width="26px"
-      />
+      <template v-if="currentLanguage">
+        <v-icon v-if="currentLanguage.locale === 'eo-UY'">language</v-icon>
+        <v-img
+          v-else
+          :src="`https://cdn.vuetifyjs.com/images/flags/${currentLanguage.country}.png`"
+          width="26px"
+        />
+      </template>
     </v-btn>
     <v-list
       dense
