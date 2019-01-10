@@ -14,6 +14,7 @@ import { PropValidator } from 'vue/types/options'
 
 // Types
 import Vue, { VNode } from 'vue'
+import { ScopedSlot } from 'vue/types/vnode'
 
 type VTreeViewInstance = InstanceType<typeof VTreeview>
 
@@ -246,8 +247,9 @@ export default mixins<options>(
         }
       }, children)
     },
-    genChild (item: any): VNode {
-      return this.$createElement(VTreeviewNode, {
+    genChild (item: any, itemSlot: ScopedSlot | undefined) {
+      const data = {
+        item,
         key: getObjectValueByPath(item, this.itemKey),
         props: {
           activatable: this.activatable,
@@ -268,12 +270,18 @@ export default mixins<options>(
           openOnClick: this.openOnClick
         },
         scopedSlots: this.$scopedSlots
-      })
+      }
+
+      if (itemSlot) {
+        return itemSlot(data)
+      }
+
+      return this.$createElement(VTreeviewNode, data)
     },
     genChildrenWrapper (): any {
       if (!this.isOpen || !this.children) return null
 
-      const children = [this.children.map(this.genChild)]
+      const children = [this.children.map(item => this.genChild(item, this.treeview.$scopedSlots.item))]
 
       return this.$createElement('div', {
         staticClass: 'v-treeview-node__children'

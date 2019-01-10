@@ -2,7 +2,7 @@
 import '../../stylus/components/_treeview.styl'
 
 // Types
-import { VNode, VNodeChildrenArrayContents } from 'vue'
+import { VNode } from 'vue'
 import { PropValidator } from 'vue/types/options'
 
 // Components
@@ -328,14 +328,17 @@ export default mixins(
         node.vnode.isActive = node.isActive
         node.vnode.isOpen = node.isOpen
       }
+    },
+    findItemByElement (el: HTMLElement) {
+      const key = Object.keys(this.nodes).find(key => !!this.nodes[key].vnode && this.nodes[key].vnode!.$el === el)
+      return key ? this.nodes[key].item : null
     }
   },
 
   render (h): VNode {
-    const children: VNodeChildrenArrayContents = this.items.length
-      ? this.items.map(VTreeviewNode.options.methods.genChild.bind(this))
-      /* istanbul ignore next */
-      : this.$slots.default! // TODO: remove type annotation with TS 3.2
+    const children = this.items.length
+      ? this.items.map(item => VTreeviewNode.options.methods.genChild.bind(this)(item, this.$scopedSlots.item))
+      : this.$slots.default
 
     return h('div', {
       staticClass: 'v-treeview',
